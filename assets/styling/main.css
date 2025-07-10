@@ -1,0 +1,102 @@
+body {
+    background-color: #0f1116;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main {
+    max-height: 700px;
+}
+
+
+#aligned-segment {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+
+}
+
+#mega-align {
+    margin: 50px;
+}
+
+.aligned-char {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 15px;
+    height: 15Spx;
+    font-size: 25px;
+    margin: 2px;
+    color: #737373;
+
+    &.softmask {
+        color: rgba(141, 141, 141, 0.444);
+    }
+
+    &.adenosine {
+        color: rgb(105, 0, 0);
+    }
+
+    &.cytosine {
+        color: rgb(181, 94, 0);
+    }
+
+    &.guanine {
+        color: rgb(0, 96, 22);
+    }
+
+    &.thymine {
+        color: rgb(112, 0, 177);
+    }
+
+}
+
+#alignment-container {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+button:hover {
+    background-color: #e95620;
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+input {
+    margin: 5px;
+    width: 300px;
+    background-color: #0f1116;
+    border-radius: 5px;
+    border-width: 2px;
+    color: #ffffff;
+}
+
+
+
+button {
+    margin: 5px;
+}
+
+#some-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
