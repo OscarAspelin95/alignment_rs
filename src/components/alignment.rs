@@ -1,4 +1,4 @@
-use dioxus::prelude::*;
+use dioxus::{document::eval, prelude::*};
 
 use crate::utils::local_alignment;
 
@@ -25,6 +25,8 @@ pub fn Alignment() -> Element {
     let mut aligned_subject: Signal<String> = use_signal(|| "".to_string());
     let mut aligned_matches: Signal<String> = use_signal(|| "".to_string());
 
+    let mut valid_input: Signal<bool> = use_signal(|| true);
+
     use_effect(move || {
         let q = query.read();
         let s = subject.read();
@@ -41,71 +43,76 @@ pub fn Alignment() -> Element {
     rsx! {
         h1 { "Local alignment visualizer" }
 
-        div { id: "some-container",
+        div { id: "form-container",
+            form {
 
-            div { id: "form-container",
-                form {
-                    label { r#for: "query-input", "Query:" }
-                    input {
-                        r#type: "text",
-                        name: "query-input",
-                        placeholder: "ATCG...",
-                        maxlength: "80",
-                        oninput: move |evt| {
-                            let v = evt.value();
-                            v.chars()
-                                .all(|c| {
-                                    match c {
-                                        'A' | 'C' | 'G' | 'T' => true,
-                                        _ => false,
-                                    }
-                                })
-                                .then(|| query.set(v));
-                        },
+
+                div { id: "some-container",
+
+                    div { id: "form-sequence",
+                        label { r#for: "query-input", "Query:" }
+                        input {
+                            r#type: "text",
+                            name: "query-input",
+                            id: "query-input",
+                            placeholder: "ATCG...",
+                            maxlength: "80",
+                            oninput: move |evt| {
+                                let v = evt.value();
+                                v.chars()
+                                    .all(|c| {
+                                        match c {
+                                            'A' | 'C' | 'G' | 'T' => true,
+                                            _ => false,
+                                        }
+                                    })
+                                    .then(|| query.set(v));
+                            },
+                        }
                     }
-                    label { r#for: "subject-input", "Subject:" }
-                    input {
-                        r#type: "text",
-                        name: "subject-input",
-                        placeholder: "ATCG...",
-                        maxlength: "80",
-                        oninput: move |evt| {
-                            let v = evt.value();
-                            v.chars()
-                                .all(|c| {
-                                    match c {
-                                        'A' | 'C' | 'G' | 'T' => true,
-                                        _ => false,
-                                    }
-                                })
-                                .then(|| subject.set(v));
-                        },
+
+                    div { id: "form-sequence",
+                        label { r#for: "subject-input", "Subject:" }
+                        input {
+                            r#type: "text",
+                            id: "subject-input",
+                            name: "subject-input",
+                            placeholder: "ATCG...",
+                            maxlength: "80",
+                            oninput: move |evt| {
+                                let v = evt.value();
+                                v.chars()
+                                    .all(|c| {
+                                        match c {
+                                            'A' | 'C' | 'G' | 'T' => true,
+                                            _ => false,
+                                        }
+                                    })
+                                    .then(|| {
+                                        subject.set(v);
+                                    });
+                            },
+                        }
                     }
+
                 }
             } // END of input container
 
-
-            // Here, we also need to clear input values.
+            // We should move this to a separate function.
             button {
+                id: "clear-btn",
                 onclick: move |_| {
                     query.set("".to_string());
                     subject.set("".to_string());
                     aligned_query.set("".to_string());
                     aligned_subject.set("".to_string());
                     aligned_matches.set("".to_string());
+                    eval(&format!(r#"document.getElementById('subject-input').value = ''"#));
+                    eval(&format!(r#"document.getElementById('query-input').value = ''"#));
                 },
                 "Clear"
             }
-
-
         }
-
-
-
-
-
-
-
 
         div { id: "mega-align",
             div { id: "aligned-segment",
