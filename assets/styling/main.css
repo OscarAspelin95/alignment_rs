@@ -13,6 +13,9 @@ body {
     max-height: 700px;
 }
 
+#invalid-input-message {
+    color: rgb(131, 0, 0);
+}
 
 #aligned-segment {
     display: flex;

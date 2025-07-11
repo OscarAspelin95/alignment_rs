@@ -17,15 +17,18 @@ fn get_id<'a>(c: char) -> &'a str {
 
 #[component]
 pub fn Alignment() -> Element {
-    // We need signals and use effects for rows and columns
+    // Input from the user.
     let mut query: Signal<String> = use_signal(|| "".to_string());
     let mut subject: Signal<String> = use_signal(|| "".to_string());
 
+    // Check if input is valid.
+    let mut valid_query: Signal<bool> = use_signal(|| true);
+    let mut valid_subject: Signal<bool> = use_signal(|| true);
+
+    // Returned from the alignment function.
     let mut aligned_query: Signal<String> = use_signal(|| "".to_string());
     let mut aligned_subject: Signal<String> = use_signal(|| "".to_string());
     let mut aligned_matches: Signal<String> = use_signal(|| "".to_string());
-
-    let mut valid_input: Signal<bool> = use_signal(|| true);
 
     use_effect(move || {
         let q = query.read();
@@ -58,15 +61,16 @@ pub fn Alignment() -> Element {
                             placeholder: "ATCG...",
                             maxlength: "80",
                             oninput: move |evt| {
-                                let v = evt.value();
+                                let v = evt.value().to_uppercase();
                                 v.chars()
-                                    .all(|c| {
-                                        match c {
-                                            'A' | 'C' | 'G' | 'T' => true,
-                                            _ => false,
-                                        }
+                                    .all(|c| { matches!(c, 'A' | 'C' | 'G' | 'T') })
+                                    .then(|| {
+                                        query.set(v.to_uppercase());
+                                        valid_query.set(true);
                                     })
-                                    .then(|| query.set(v));
+                                    .unwrap_or_else(|| {
+                                        valid_query.set(false);
+                                    });
                             },
                         }
                     }
@@ -80,16 +84,15 @@ pub fn Alignment() -> Element {
                             placeholder: "ATCG...",
                             maxlength: "80",
                             oninput: move |evt| {
-                                let v = evt.value();
+                                let v = evt.value().to_uppercase();
                                 v.chars()
-                                    .all(|c| {
-                                        match c {
-                                            'A' | 'C' | 'G' | 'T' => true,
-                                            _ => false,
-                                        }
-                                    })
+                                    .all(|c| { matches!(c, 'A' | 'C' | 'G' | 'T') })
                                     .then(|| {
                                         subject.set(v);
+                                        valid_subject.set(true);
+                                    })
+                                    .unwrap_or_else(|| {
+                                        valid_subject.set(false);
                                     });
                             },
                         }
@@ -107,6 +110,8 @@ pub fn Alignment() -> Element {
                     aligned_query.set("".to_string());
                     aligned_subject.set("".to_string());
                     aligned_matches.set("".to_string());
+                    valid_query.set(true);
+                    valid_subject.set(true);
                     eval(&format!(r#"document.getElementById('subject-input').value = ''"#));
                     eval(&format!(r#"document.getElementById('query-input').value = ''"#));
                 },
@@ -114,7 +119,13 @@ pub fn Alignment() -> Element {
             }
         }
 
+        if !*valid_query.read() | !*valid_subject.read() {
+            span { id: "invalid-input-message", "Only canonical bases [ATCGatcg] allowed." }
+        }
+
         div { id: "mega-align",
+
+
             div { id: "aligned-segment",
                 for c in aligned_query.read().chars() {
 
