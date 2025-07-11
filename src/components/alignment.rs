@@ -30,6 +30,32 @@ pub fn Alignment() -> Element {
     let mut aligned_subject: Signal<String> = use_signal(|| "".to_string());
     let mut aligned_matches: Signal<String> = use_signal(|| "".to_string());
 
+    let reset = move || async move {
+        [
+            query,
+            subject,
+            aligned_query,
+            aligned_subject,
+            aligned_matches,
+        ]
+        .into_iter()
+        .for_each(|mut string_signal| {
+            string_signal.set("".to_string());
+        });
+
+        // Reset query validation.
+        valid_query.set(true);
+        eval(&format!(
+            r#"document.getElementById('query-input').value = ''"#
+        ));
+
+        // Reset subject validation.
+        valid_subject.set(true);
+        eval(&format!(
+            r#"document.getElementById('subject-input').value = ''"#
+        ));
+    };
+
     use_effect(move || {
         let q = query.read();
         let s = subject.read();
@@ -104,17 +130,7 @@ pub fn Alignment() -> Element {
             // We should move this to a separate function.
             button {
                 id: "clear-btn",
-                onclick: move |_| {
-                    query.set("".to_string());
-                    subject.set("".to_string());
-                    aligned_query.set("".to_string());
-                    aligned_subject.set("".to_string());
-                    aligned_matches.set("".to_string());
-                    valid_query.set(true);
-                    valid_subject.set(true);
-                    eval(&format!(r#"document.getElementById('subject-input').value = ''"#));
-                    eval(&format!(r#"document.getElementById('query-input').value = ''"#));
-                },
+                onclick: move |_| async move { reset().await },
                 "Clear"
             }
         }
