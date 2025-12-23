@@ -5,17 +5,11 @@
 # HTML title tag content
 title = "alignment_rs"
 
-# include `assets` in web platform
-[web.resource]
-
 # Additional CSS style files
 style = []
 
-# Additional JavaScript files
-script = []
-
-[web.resource.dev]
-
-# Javascript code file
-# serve: [dev-server] only
-script = []
+[bundle]
+identifier = "Alignment Rs"
+description = "Desktop app for visualizing the Smith-Waterman algorithm"
+publisher = "Oscar Aspelin"
+icon = ["assets/icon/32x32.png", "assets/icon/16x16.png"]
