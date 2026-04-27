@@ -3,6 +3,8 @@ Desktop application for visualizing alignments using the Smith-Waterman algorith
 
 Built using the [Dioxus](https://github.com/DioxusLabs/dioxus) framework.
 
+Try it out [online](https://alignment-viewer.netlify.app/)
+
 
 ## Usage
 The easiest way to get started is to download the `.AppImage` application from the [releases page](https://github.com/OscarAspelin95/alignment_rs/releases).
@@ -12,7 +14,7 @@ The easiest way to get started is to download the `.AppImage` application from t
 ### Requirements
 - Linux OS (Ubuntu 24.04.2)
 - Rust 2021 edition
-- Dioxus cli == 0.7.2
+- Dioxus cli == 0.7.6
 
 ### Installation
 Make sure `cargo` and `dioxus-cli` are installed.
@@ -21,4 +23,6 @@ Make sure `cargo` and `dioxus-cli` are installed.
 `make run` - build and spin up a local desktop application
 `make bundle-linux` - build and create a Linux bundle.
 
+
+###
 ![play_gif](https://github.com/OscarAspelin95/alignment_rs/blob/7af0b08048db199f6d69ec50b9fe91c569ea6b2e/alignment.gif)

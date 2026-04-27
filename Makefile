@@ -1,7 +1,7 @@
-.PHONY: run bundle-linux
+.PHONY: run
 
 run:
 	dx serve --release
 
-bundle-linux:
-	dx bundle --release --linux
+bundle-web:
+	dx bundle --web --release

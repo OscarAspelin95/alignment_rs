@@ -9,7 +9,6 @@ title = "alignment_rs"
 style = []
 
 [bundle]
-identifier = "Alignment Rs"
+identifier = "AlignmentRs.app"
 description = "Desktop app for visualizing the Smith-Waterman algorithm"
 publisher = "Oscar Aspelin"
-icon = ["assets/icon/32x32.png", "assets/icon/16x16.png"]

@@ -2,8 +2,6 @@ use dioxus::{document::eval, prelude::*};
 
 use crate::utils::local_alignment;
 
-/// NOTE - we can rewrite this to return a String
-/// to make the matching a bit more streamlined.
 fn get_id<'a>(c: char) -> &'a str {
     match c {
         'A' => "aligned-char adenosine",
@@ -74,10 +72,7 @@ pub fn Alignment() -> Element {
 
         div { id: "form-container",
             form {
-
-
-                div { id: "some-container",
-
+                div { id: "form-container-inner",
                     div { id: "form-sequence",
                         label { r#for: "query-input", "Query:" }
                         input {
@@ -85,7 +80,7 @@ pub fn Alignment() -> Element {
                             name: "query-input",
                             id: "query-input",
                             placeholder: "ATCG...",
-                            maxlength: "80",
+                            maxlength: "35",
                             oninput: move |evt| {
                                 let v = evt.value().to_uppercase();
                                 v.chars()
@@ -108,7 +103,7 @@ pub fn Alignment() -> Element {
                             id: "subject-input",
                             name: "subject-input",
                             placeholder: "ATCG...",
-                            maxlength: "80",
+                            maxlength: "35",
                             oninput: move |evt| {
                                 let v = evt.value().to_uppercase();
                                 v.chars()
@@ -125,7 +120,7 @@ pub fn Alignment() -> Element {
                     }
 
                 }
-            } // END of input container
+            }
 
             // We should move this to a separate function.
             button {
@@ -141,14 +136,12 @@ pub fn Alignment() -> Element {
 
         div { id: "mega-align",
 
-
             div { id: "aligned-segment",
                 for c in aligned_query.read().chars() {
 
                     div { class: get_id(c), "{c}" }
                 }
             }
-
 
             div { id: "aligned-segment",
                 for c in aligned_matches.read().chars() {
@@ -162,5 +155,5 @@ pub fn Alignment() -> Element {
                 }
             }
         }
-    } // END of RSX
+    }
 }
